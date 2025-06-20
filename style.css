@@ -1,74 +1,58 @@
-* {
-  box-sizing: border-box;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  height: 100vh;
   display: flex;
-  align-items: center;
+  height: 100vh;
   justify-content: center;
-  color: #fff;
+  align-items: center;
 }
 
-.container {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 30px 40px;
+.form-container {
+  background-color: #ffffff;
+  padding: 30px;
   border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 500px;
+}
+
+h2 {
   text-align: center;
-}
-
-h1 {
-  font-size: 2.2em;
-  margin-bottom: 10px;
-}
-
-.description {
-  font-size: 1em;
+  color: #333;
   margin-bottom: 20px;
-  color: #e0e0e0;
 }
 
 form input,
 form textarea {
   width: 100%;
-  padding: 12px;
+  padding: 12px 15px;
   margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 1em;
-  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
 }
 
-form textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-button {
-  background-color: #fff;
-  color: #764ba2;
+form button {
+  background-color: #667eea;
+  color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-size: 1em;
+  padding: 12px 20px;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
   margin-top: 10px;
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: #f0f0f0;
+form button:hover {
+  background-color: #5a67d8;
 }
 
-.feedback {
+#successMessage {
   margin-top: 15px;
-  font-weight: 500;
+  text-align: center;
+  font-weight: 600;
 }
