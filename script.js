@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch("https://contact-form-backend.onrender.com/submit-form", {
+      const response = await fetch("https://contact-form-intern.onrender.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
