@@ -1,49 +1,58 @@
-// server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config(); // Load .env
+const dotenv = require("dotenv");
 
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.error("MongoDB error:", err));
-
-// Schema
-const Submission = mongoose.model("Submission", new mongoose.Schema({
+// Mongoose model
+const submissionSchema = new mongoose.Schema({
   name: String,
   email: String,
   message: String,
-  submittedAt: {
-    type: Date,
-    default: Date.now,
-  },
-}));
+});
 
-// API endpoint
+const Submission = mongoose.model("Submission", submissionSchema);
+
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// POST route for form submission
 app.post("/submit-form", async (req, res) => {
   const { name, email, message } = req.body;
+
   if (!name || !email || !message) {
-    return res.status(400).json({ success: false, message: "All fields are required." });
+    return res.status(400).json({ error: "All fields are required" });
   }
 
   try {
-    await Submission.create({ name, email, message });
-    res.json({ success: true, message: "Form submitted successfully!" });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Server error." });
+    const newSubmission = new Submission({ name, email, message });
+    await newSubmission.save();
+    res.json({ message: "Form submitted successfully" });
+  } catch (error) {
+    console.error("❌ Error saving to DB:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// Optional: test GET route
+app.get("/", (req, res) => {
+  res.send("🚀 Contact form backend is live");
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
