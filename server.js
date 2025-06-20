@@ -36,12 +36,16 @@ app.post("/submit-form", async (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
+    console.log("❗ Missing fields:", { name, email, message });
     return res.status(400).json({ error: "All fields are required." });
   }
+
+  console.log("📤 Saving to DB:", { name, email, message });
 
   try {
     const newSubmission = new Submission({ name, email, message });
     await newSubmission.save();
+    console.log("✅ Saved successfully");
     res.status(200).json({ message: "Form submitted successfully!" });
   } catch (error) {
     console.error("❌ Error saving form:", error);
