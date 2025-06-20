@@ -1,53 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  const messageBox = document.getElementById("messageBox");
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
+  if (!name || !email || !message) {
+    alert("Please fill in all fields.");
+    return;
+  }
 
-    // Basic client-side validation
-    if (!name || !email || !message) {
-      showMessage("Please fill in all fields.", "error");
-      return;
+  try {
+    const response = await fetch("https://contact-form-intern.onrender.com/submit-form", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, message }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message);
+      document.getElementById("contactForm").reset();
+    } else {
+      alert(result.error || "Something went wrong");
     }
-
-    // Optional: Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showMessage("Please enter a valid email address.", "error");
-      return;
-    }
-
-    try {
-      const response = await fetch("https://contact-form-intern.onrender.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, email, message })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        showMessage("Thank you for your message!", "success");
-        form.reset();
-      } else {
-        showMessage(data.error || "Something went wrong. Please try again.", "error");
-      }
-    } catch (err) {
-      showMessage("Server error. Please try again later.", "error");
-      console.error("Error submitting form:", err);
-    }
-  });
-
-  function showMessage(text, type) {
-    messageBox.textContent = text;
-    messageBox.className = type;
-    messageBox.style.display = "block";
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Server error. Please try again later.");
   }
 });
